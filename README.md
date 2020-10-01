@@ -1,7 +1,7 @@
 # Ansible role `mariadb_install`
 
 
-An Ansible role for installing and secure MariaDB in RHEL/CentOS (7,8) and Debian (8,9,10) and Ubunut (20.04, 19.10, 18.04, 16.04) distributions. Specifically, the responsibilities of this role are to:
+An Ansible role for installing and secure MariaDB in RHEL/CentOS (7,8) and Debian (9,10) and Ubunut (20.04, 19.10, 18.04, 16.04) distributions. Specifically, the responsibilities of this role are to:
 
 - Install MariaDB packages from the official MariaDB repositories
 - Configuration Mariadb server

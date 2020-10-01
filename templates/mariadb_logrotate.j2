@@ -1,0 +1,17 @@
+/var/log/mariadb/*.log {
+        # create 600 mysql mysql
+        notifempty
+        {{ mariadb_logrotate.rotation }}
+        rotate {{ mariadb_logrotate.rotate }}
+        missingok
+        compress
+    postrotate
+        # just if mysqld is really running
+        if test -x /usr/bin/mysqladmin && \
+           /usr/bin/mysqladmin ping &>/dev/null
+        then
+           /usr/bin/mysqladmin --local flush-error-log \
+                    flush-engine-log flush-general-log flush-slow-log
+        fi
+    endscript
+}

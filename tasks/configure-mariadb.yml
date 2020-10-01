@@ -1,0 +1,46 @@
+- name: Make mariadb server file configuration
+  template:
+    src: server.cnf.j2
+    dest: /etc/my.cnf.d/server.cnf
+  notify: restart mariadb server
+  when: ( ansible_distribution_file_variety == "RedHat" )
+
+- name: Make mariadb server file configuration
+  template:
+    src: server.cnf.j2
+    dest: /etc/mysql/mariadb.cnf
+  notify: restart mariadb server
+  when: ( ansible_distribution_file_variety == "Debian" )
+
+- name: Configure swappiness
+  sysctl:
+    name: vm.swappiness
+    value: "{{ swappiness }}"
+    state: present
+  when:
+    - configure_swappiness|bool
+
+- name: Create log directory
+  file:
+    state: directory
+    path: /var/log/mariadb
+    owner: mysql
+    group: mysql
+    mode: 0755
+  notify: set mariadb log selinux
+  when: ( ansible_distribution_file_variety == "RedHat" )
+
+- name: Create log directory
+  file:
+    state: directory
+    path: /var/log/mariadb
+    owner: mysql
+    group: mysql
+    mode: 0765
+  when: ( ansible_distribution_file_variety == "Debian" )
+
+- name: Configure MariaDB Logrotate
+  template:
+    src: mariadb_logrotate.j2
+    dest: /etc/logrotate.d/mysql
+  notify: restart mariadb server

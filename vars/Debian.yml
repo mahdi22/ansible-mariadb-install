@@ -1,0 +1,12 @@
+mariadb_packages:
+  - mariadb-server
+  - mariadb-common
+  - python-mysqldb
+  - python-openssl
+repo_software_package:
+  - software-properties-common 
+  - dirmngr
+  - apt-transport-https
+key_url: "https://mariadb.org/mariadb_release_signing_key.asc"
+repo_deb: deb [arch=amd64] https://mirror.klaus-uwe.me/mariadb/repo/10.4/debian
+mariadb_socket: /run/mysqld/mysqld.sock

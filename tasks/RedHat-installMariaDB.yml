@@ -1,0 +1,11 @@
+- name: Add MariaDB Repository for {{ ansible_distribution }}
+  template:
+    src: mariadb-server.repo.j2
+    dest: /etc/yum.repos.d/mariadb-server.repo
+
+- name: Install Mariadb server for {{ ansible_distribution }}
+  yum:
+    name: "{{ mariadb_packages }}"
+    state: present
+  notify: restart mariadb server
+- meta: flush_handlers

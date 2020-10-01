@@ -1,0 +1,26 @@
+---
+# vars file for mariadb
+mariadb_version: "10.4"
+mariadb_config_file:
+  mysqld:
+    - "user = mysql"
+    - "port = 3306"
+    - "datadir = /var/lib/mysql"
+    - "skip-external-locking"
+    - "key_buffer_size	= 16M"
+    - "max_allowed_packet	= 16M"
+    - "thread_stack	= 192K"
+    - "thread_cache_size = 8"
+    - "query_cache_size  = 32M"
+    - "log_error = /var/log/mariadb/error.log"
+    - "unix_socket=OFF"
+    - "bind-address= 127.0.0.1"
+swappiness: "0"
+mariadb_service: mariadb
+mariadb_logrotate:
+    rotate: "7"
+    rotation: daily
+database: cdr
+db_user_name: "userdata"
+db_user_password: "qwerty"
+priviliges: "ALL"

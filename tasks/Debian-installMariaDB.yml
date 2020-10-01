@@ -1,0 +1,24 @@
+- name: Install repo software package for {{ ansible_distribution }}
+  apt:
+    name: "{{ repo_software_package }}"
+    state: present
+
+- name: Add MariaDB Repository Key for {{ ansible_distribution }}
+  apt_key:
+    url: "{{ key_url }}"
+    state: present
+
+- name: Add MariaDB Repository for {{ ansible_distribution }}
+  apt_repository:
+    repo: "{{ repo_deb }} {{ ansible_distribution_release }}  main"
+    state: present
+    filename: mariadb
+  register: addmariadbrepo
+  #notify: Update repo cache
+
+#- meta: flush_handlers
+
+- name: Install Mariadb server for {{ ansible_distribution }}
+  apt:
+    name: "{{ mariadb_packages }}"
+    state: present

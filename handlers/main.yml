@@ -1,0 +1,22 @@
+---
+# handlers file for mariadb
+- name: set mariadb log selinux
+  sefcontext:
+    target: '/var/log/mariadb(/.*)?'
+    setype: mysqld_log_t
+    state: present
+- name: restart mariadb server
+  systemd:
+    name: "{{ mariadb_service }}"
+    state: restarted
+    enabled: yes
+
+- name: Remove test database priviledges
+  command: mysql -u root -p{{ mysql_root_password }} -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'"
+
+- name: Flush Priviliges
+  command: mysql -u root -p{{ mysql_root_password }} -e "FLUSH PRIVILEGES"
+
+- name: Update repo cache
+  apt:
+    update_cache: yes

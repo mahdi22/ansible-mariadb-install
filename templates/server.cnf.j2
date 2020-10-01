@@ -1,0 +1,22 @@
+[client]
+
+[mysqld]
+{% for params in mariadb_config_file.mysqld %}
+{{ params }}
+{% endfor %}
+{% if allow_remote_connections is not defined %}
+bind-address  = 127.0.0.1
+{% endif %}
+{% if allow_remote_connections is defined and not allow_remote_connections %}
+bind-address  = 127.0.0.1
+{% endif %}
+{% if allow_remote_connections is defined and allow_remote_connections %}
+bind-address  = 0.0.0.0
+{% endif %}
+{% if  ansible_distribution_file_variety == "RedHat" %}
+[mariadb]
+{% endif %}
+
+{% if  ansible_distribution_file_variety == "Debian" %}
+!includedir /etc/mysql/mariadb.conf.d/
+{% endif %}

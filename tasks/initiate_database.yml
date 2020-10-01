@@ -1,0 +1,33 @@
+- name: Create Database
+  mysql_db:
+    name: "{{ database }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+
+- name: Create mysql User defined database
+  mysql_user:
+    name: "{{ db_user_name }}"
+    password: "{{ db_user_password }}"
+    priv: '{{ database }}.*:{{ priviliges }}'
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+
+- name: Copy database init script table.sql
+  copy:
+    src: table.sql
+    dest: /tmp/
+
+- name: Import init script to database
+  mysql_db:
+    name: "{{ database }}"
+    state: import
+    target: /tmp/table.sql
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Delete init script file
+  file:
+    path: /tmp/table.sql
+    state: absent

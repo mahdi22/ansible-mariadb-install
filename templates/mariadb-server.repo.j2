@@ -1,0 +1,8 @@
+[mariadb]
+name = MariaDB
+baseurl = "http://yum.mariadb.org/{{ mariadb_version}}/{{ ansible_distribution|lower|regex_replace('redhat', 'rhel')|regex_replace('oraclelinux', 'centos') }}{{ ansible_distribution_major_version }}-amd64"
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+{% if ansible_distribution_file_variety == "RedHat" and ansible_distribution_major_version == "8" %}
+module_hotfixes=1
+{% endif %}

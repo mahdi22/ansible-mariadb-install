@@ -1,0 +1,79 @@
+- name: Check if custom password is specified for root user
+  debug:
+    msg: >
+      WARNING DETECTED !!! the password for mysql root user is empty.
+      Please set a password with a variable mysql_root_password on defaults/main.yml
+      te secure the root user.
+  when: not mysql_root_password
+
+- name: Check if mysql root password was not set
+  shell: >
+    mysql -u root
+    -h localhost
+    -e "quit"
+  changed_when: false
+  ignore_errors: true
+  register: check_passwd_root
+
+- name: Check if unix_socket plugin is enabled
+  shell: >
+    mysql -u root
+    -h localhost
+    -e "SELECT plugin from mysql.user WHERE user = 'root'"
+  ignore_errors: true
+  register: check_unix_socket_plugin
+  changed_when: check_unix_socket_plugin.stdout is search('socket')
+  when: check_passwd_root.rc == 0
+
+- name: Disable unix_socket plugin if set
+  shell: >
+    mysql -u root
+    -h localhost
+    -e "UPDATE mysql.user SET plugin = '' WHERE user = 'root'; FLUSH PRIVILEGES;"
+  when:
+    - check_passwd_root.rc == 0
+    - check_unix_socket_plugin.stdout is search('socket')
+
+- name: Delete remote login connection
+  shell: >
+    mysql -u root
+    -h localhost
+    -e "delete from mysql.user where User='root' and Host NOT IN ('localhost', '127.0.0.1');"
+  when:
+    - allow_remote_connections
+    - check_passwd_root.rc == 0
+
+- name: Set MariaDB root password for 127.0.0.1, localhost
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host: "{{ item }}"
+    login_user: root
+    #login_password: "{{ mysql_root_password }}"
+    login_unix_socket: "{{ mariadb_socket }}"
+    state: present
+  with_items:
+    - 127.0.0.1
+    - localhost
+  when: check_passwd_root.rc == 0
+  notify: Flush Priviliges
+
+- name: Remove all anonymous user
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: 'ansible'
+    host_all: yes
+    state: absent
+  notify: Flush Priviliges
+
+- name: Remove test database
+  mysql_db:
+    login_user: "root"
+    login_password: "{{ mysql_root_password }}"
+    db: "test"
+    state: absent
+  register: remove_test_db
+  notify:
+    - Remove test database priviledges
+    - Flush Priviliges

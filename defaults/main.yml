@@ -1,0 +1,5 @@
+---
+# defaults file for mariadb
+allow_remote_connections: true
+configure_swappiness: true
+mysql_root_password: 'azerty'

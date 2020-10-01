@@ -1,0 +1,6 @@
+mariadb_packages:
+  - MariaDB-common
+  - MariaDB-server
+  - python3-PyMySQL
+  - policycoreutils-python-utils
+mariadb_socket: /var/lib/mysql/mysql.sock

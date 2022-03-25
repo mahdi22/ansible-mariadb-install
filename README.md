@@ -59,7 +59,7 @@ defaults/main.yml
 ```Yaml
 mysql_root_password: 'azerty'
 ```
-(1) To import sql script in databases, set import_sql_file: true, define sql_file_name and put your sql scripts in files directory (mahdi22.mariadb_install/files/). E.g.:
+(3) To import sql script in databases, set import_sql_file: true, define sql_file_name and put your sql scripts in files directory (mahdi22.mariadb_install/files/). E.g.:
 defaults/main.yml
 ```yaml
 import_sql_file: true
@@ -117,7 +117,7 @@ Playbook example to execute role using Web Proxy
           https_proxy: http://proxy.local:8080/
 ```
 
-Playbook example to use role with import sql script
+Playbook example to execute role with import sql script
 
 ```Yaml
 - hosts: mariadb

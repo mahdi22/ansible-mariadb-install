@@ -1,3 +1,6 @@
+![Ansible](https://img.shields.io/ansible/role/d/51033)
+![Ansible](https://img.shields.io/ansible/quality/51033)
+[![Galaxy](https://img.shields.io/ansible/role/51033)](https://galaxy.ansible.com/mahdi22/mariadb_install)
 # Ansible role `mariadb_install`
 
 

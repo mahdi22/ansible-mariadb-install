@@ -59,7 +59,7 @@ defaults/main.yml
 ```Yaml
 mysql_root_password: 'azerty'
 ```
-(1) To import sql files in databases, set import_sql_file: true, set sql files name and put your sql files in files directory (mahdi22.mariadb_install/files/). E.g.:
+(1) To import sql script in databases, set import_sql_file: true, define sql_file_name and put your sql scripts in files directory (mahdi22.mariadb_install/files/). E.g.:
 defaults/main.yml
 ```yaml
 import_sql_file: true

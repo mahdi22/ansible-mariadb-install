@@ -1,0 +1,65 @@
+- name: Install repo software package for {{ ansible_distribution }}
+  apt:
+    name: "{{ repo_software_package }}"
+    state: present
+  environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
+
+- name: Install repo software package for {{ ansible_distribution }}
+  apt:
+    name: "{{ repo_software_package }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)
+
+- name: Add MariaDB Repository Key for {{ ansible_distribution }}
+  apt_key:
+    url: "{{ key_url }}"
+    state: present
+  environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
+
+- name: Add MariaDB Repository Key for {{ ansible_distribution }}
+  apt_key:
+    url: "{{ key_url }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)
+
+- name: Add MariaDB Repository for {{ ansible_distribution }}
+  apt_repository:
+    repo: "{{ repo_deb }} {{ ansible_distribution_release }}  main"
+    state: present
+    filename: mariadb
+  environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
+  register: addmariadbrepo
+  #notify: Update repo cache
+
+- name: Add MariaDB Repository for {{ ansible_distribution }}
+  apt_repository:
+    repo: "{{ repo_deb }} {{ ansible_distribution_release }}  main"
+    state: present
+    filename: mariadb
+  when: (use_proxy is not defined) or (not use_proxy)
+  register: addmariadbrepo
+#- meta: flush_handlers
+
+- name: Install Mariadb server for {{ ansible_distribution }}
+  apt:
+    name: "{{ mariadb_packages }}"
+    state: present
+  environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
+
+- name: Install Mariadb server for {{ ansible_distribution }}
+  apt:
+    name: "{{ mariadb_packages }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)

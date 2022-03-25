@@ -7,5 +7,16 @@
   yum:
     name: "{{ mariadb_packages }}"
     state: present
+  environment: "{{ proxy_env }}"
+  when:
+    - use_proxy is defined
+    - use_proxy
   notify: restart mariadb server
+
+- name: Install Mariadb server for {{ ansible_distribution }}
+  yum:
+    name: "{{ mariadb_packages }}"
+    state: present
+  when: (use_proxy is not defined) or (not use_proxy)
+
 - meta: flush_handlers

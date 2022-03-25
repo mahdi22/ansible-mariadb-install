@@ -1,5 +1,24 @@
 ---
 # defaults file for mariadb
-allow_remote_connections: true
-configure_swappiness: true
+mariadb_version: "10.4"
+deny_remote_connections: True
+configure_swappiness: True
+swappiness: "10"
 mysql_root_password: 'azerty'
+create_database: False
+database: []
+create_db_user: False
+db_user_name: [] # Example: db_user_name: "db_user"
+db_user_password: [] # Example: db_user_password: "db_user_pass"
+priviliges: "ALL"
+use_proxy: False
+proxy_env: []
+#example:
+#proxy_env:
+#  http_proxy: http://proxy.local:8080/
+#  https_proxy: http://proxy.local:8080/
+mariadb_logrotate:
+    rotate: "7"
+    rotation: daily
+import_sql_file: False
+sql_file_name: []

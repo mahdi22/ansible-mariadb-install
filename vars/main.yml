@@ -1,6 +1,5 @@
 ---
 # vars file for mariadb
-mariadb_version: "10.4"
 mariadb_config_file:
   mysqld:
     - "user = mysql"
@@ -14,13 +13,4 @@ mariadb_config_file:
     - "query_cache_size  = 32M"
     - "log_error = /var/log/mariadb/error.log"
     - "unix_socket=OFF"
-    - "bind-address= 127.0.0.1"
-swappiness: "0"
 mariadb_service: mariadb
-mariadb_logrotate:
-    rotate: "7"
-    rotation: daily
-database: cdr
-db_user_name: "userdata"
-db_user_password: "qwerty"
-priviliges: "ALL"

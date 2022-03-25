@@ -4,6 +4,9 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
     state: present
+  when:
+    - create_database
+    - database is defined
 
 - name: Create mysql User defined database
   mysql_user:
@@ -13,21 +16,33 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
     state: present
+  when:
+    - create_database
+    - database is defined
+    - create_db_user
+    - db_user_name is defined
 
-- name: Copy database init script table.sql
+- name: Copy SQL script files
   copy:
-    src: table.sql
+    src: "{{ item }}"
     dest: /tmp/
+  with_items: "{{ sql_file_name }}"
+  when: import_sql_file
 
 - name: Import init script to database
   mysql_db:
     name: "{{ database }}"
     state: import
-    target: /tmp/table.sql
+    target: /tmp/{{ item }}
     login_user: root
     login_password: "{{ mysql_root_password }}"
+  when: 
+    - database is defined and create_database
+    - import_sql_file
 
-- name: Delete init script file
+- name: Delete SQL script files
   file:
-    path: /tmp/table.sql
+    path: /tmp/{{ item }}
     state: absent
+  with_items: "{{ sql_file_name }}"
+  when: import_sql_file

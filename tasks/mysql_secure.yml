@@ -40,7 +40,7 @@
     -h localhost
     -e "delete from mysql.user where User='root' and Host NOT IN ('localhost', '127.0.0.1');"
   when:
-    - allow_remote_connections
+    - deny_remote_connections
     - check_passwd_root.rc == 0
 
 - name: Set MariaDB root password for 127.0.0.1, localhost
@@ -58,11 +58,11 @@
   when: check_passwd_root.rc == 0
   notify: Flush Priviliges
 
-- name: Remove all anonymous user
+- name: Remove all Anonymous users
   mysql_user:
     login_user: root
     login_password: "{{ mysql_root_password }}"
-    name: 'ansible'
+    name: ''
     host_all: yes
     state: absent
   notify: Flush Priviliges

@@ -36,6 +36,7 @@
     target: /tmp/{{ item }}
     login_user: root
     login_password: "{{ mysql_root_password }}"
+  with_items: "{{ sql_file_name }}"
   when: 
     - database is defined and create_database
     - import_sql_file
